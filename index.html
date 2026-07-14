@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EU Steel Safeguard Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <div>
+      <h1>EU Steel Safeguard Dashboard</h1>
+      <p>Steel safeguard quota reference</p>
+    </div>
+    <small id="updated"></small>
+  </header>
+
+  <main>
+    <section class="notice">
+      Use any filter independently. By default, the dashboard shows the
+      current quarter and the following quarter. Customs applicability and
+      clearance outcomes remain subject to EU rules and customs confirmation.
+    </section>
+
+    <section class="filters">
+      <label>
+        Product category
+        <select id="product">
+          <option value="">All product categories</option>
+        </select>
+      </label>
+
+      <label>
+        Quarter
+        <select id="period">
+          <option value="">Current + next quarter</option>
+        </select>
+      </label>
+
+      <label>
+        Country / quota pool
+        <select id="origin">
+          <option value="">All countries / quota pools</option>
+        </select>
+      </label>
+
+      <button id="reset">Reset filters</button>
+    </section>
+
+    <section class="metrics">
+      <div>
+        <b id="count">0</b>
+        <span>Quota records</span>
+      </div>
+
+      <div>
+        <b id="tonnes">0</b>
+        <span>Total quarterly quota (tonnes)</span>
+      </div>
+
+      <div>
+        <b id="origins">0</b>
+        <span>Countries / quota pools</span>
+      </div>
+    </section>
+
+    <p id="status" aria-live="polite"></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Quarter</th>
+            <th>Product category</th>
+            <th>Country / quota pool</th>
+            <th>Quota type</th>
+            <th>Quarterly quota (t)</th>
+            <th>YoY change</th>
+            <th>Order number</th>
+            <th>Out-of-quota duty</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <p class="footnote">
+      “YoY change” compares the selected quarter with the same quarter one
+      year earlier for the same product category and country / quota pool.
+      “New / no comparable prior-year quota” means a matching prior-year
+      record was not available. Only independently trackable country-specific
+      quotas and quota pools are displayed.
+    </p>
+
+    <footer>
+      Maintained by Milton Wang @ Yiehphui
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
