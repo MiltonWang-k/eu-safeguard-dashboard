@@ -1,5 +1,8 @@
 const CSV_FILE = "safeguard_quota_dashboard_upload.csv";
+
 let data = [];
+let sortColumn = "quota";
+let sortDirection = "desc";
 
 const $ = (id) => document.getElementById(id);
 
@@ -28,6 +31,7 @@ function parseCSV(text) {
       cell = "";
     } else if ((c === "\n" || c === "\r") && !quoted) {
       if (c === "\r" && next === "\n") i++;
+
       row.push(cell);
 
       if (row.length > 1) rows.push(row);
@@ -140,11 +144,34 @@ function yoy(row) {
   };
 }
 
+function updateSortArrows() {
+  $("quota-arrow").textContent =
+    sortColumn === "quota"
+      ? sortDirection === "desc" ? "▼" : "▲"
+      : "";
+
+  $("yoy-arrow").textContent =
+    sortColumn === "yoy"
+      ? sortDirection === "desc" ? "▼" : "▲"
+      : "";
+}
+
+function changeSort(column) {
+  if (sortColumn === column) {
+    sortDirection =
+      sortDirection === "desc" ? "asc" : "desc";
+  } else {
+    sortColumn = column;
+    sortDirection = "desc";
+  }
+
+  render();
+}
+
 function render() {
   const product = $("product").value;
   const period = $("period").value;
   const origin = $("origin").value;
-  const sort = $("sort").value;
 
   let results = data.filter(trackable);
 
@@ -164,7 +191,6 @@ function render() {
 
   if (!period) {
     const wanted = defaultPeriods();
-
     const available = [...new Set(results.map((row) => row.period))];
 
     const usable = wanted.filter((item) => available.includes(item));
@@ -186,26 +212,26 @@ function render() {
   }));
 
   results.sort((a, b) => {
-    if (sort === "quota_desc") {
-      return number(b.quota_tonnes) - number(a.quota_tonnes);
+    let valueA;
+    let valueB;
+
+    if (sortColumn === "quota") {
+      valueA = number(a.quota_tonnes);
+      valueB = number(b.quota_tonnes);
+    } else {
+      valueA = a.yoyResult.value;
+      valueB = b.yoyResult.value;
+
+      if (valueA === null) valueA = -Infinity;
+      if (valueB === null) valueB = -Infinity;
     }
 
-    if (sort === "quota_asc") {
-      return number(a.quota_tonnes) - number(b.quota_tonnes);
-    }
-
-    if (sort === "yoy_desc") {
-      return (b.yoyResult.value ?? -Infinity) -
-             (a.yoyResult.value ?? -Infinity);
-    }
-
-    if (sort === "yoy_asc") {
-      return (a.yoyResult.value ?? Infinity) -
-             (b.yoyResult.value ?? Infinity);
-    }
-
-    return 0;
+    return sortDirection === "desc"
+      ? valueB - valueA
+      : valueA - valueB;
   });
+
+  updateSortArrows();
 
   $("count").textContent = results.length;
 
@@ -228,11 +254,7 @@ function render() {
     ? results.map((row) => `
       <tr>
         <td>${escapeHtml(row.period)}</td>
-
-        <td>
-          <b>${escapeHtml(row.product_no)}</b>
-        </td>
-
+        <td><b>${escapeHtml(row.product_no)}</b></td>
         <td>${escapeHtml(row.country_or_quota_group)}</td>
 
         <td>
@@ -300,15 +322,23 @@ fetch(CSV_FILE)
 
     $("updated").textContent = `Data records: ${data.length}`;
 
-    ["product", "period", "origin", "sort"].forEach((id) => {
+    ["product", "period", "origin"].forEach((id) => {
       $(id).addEventListener("change", render);
+    });
+
+    document.querySelectorAll(".sortable").forEach((header) => {
+      header.addEventListener("click", () => {
+        changeSort(header.dataset.sort);
+      });
     });
 
     $("reset").addEventListener("click", () => {
       $("product").value = "";
       $("period").value = "";
       $("origin").value = "";
-      $("sort").value = "quota_desc";
+
+      sortColumn = "quota";
+      sortDirection = "desc";
 
       render();
     });
