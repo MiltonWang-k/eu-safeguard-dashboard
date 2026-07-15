@@ -44,24 +44,6 @@
         </select>
       </label>
 
-      <label>
-        Sort results
-        <select id="sort">
-          <option value="quota_desc">
-            Quarterly quota: high to low
-          </option>
-          <option value="quota_asc">
-            Quarterly quota: low to high
-          </option>
-          <option value="yoy_desc">
-            YoY change: high to low
-          </option>
-          <option value="yoy_asc">
-            YoY change: low to high
-          </option>
-        </select>
-      </label>
-
       <button id="reset">Reset filters</button>
     </section>
 
@@ -92,8 +74,17 @@
             <th>Product category</th>
             <th>Country / quota pool</th>
             <th>Quota type</th>
-            <th>Quarterly quota (t)</th>
-            <th>YoY change</th>
+
+            <th class="sortable" data-sort="quota">
+              Quarterly quota (t)
+              <span id="quota-arrow">▼</span>
+            </th>
+
+            <th class="sortable" data-sort="yoy">
+              YoY change
+              <span id="yoy-arrow"></span>
+            </th>
+
             <th>Order number</th>
             <th>Out-of-quota duty</th>
           </tr>
@@ -104,8 +95,9 @@
     </div>
 
     <p class="footnote">
-      YoY change compares the same product category, country/quota pool,
-      and quarter against the previous year.
+      Click “Quarterly quota (t)” or “YoY change” to sort. YoY change compares
+      the same product category, country/quota pool, and quarter against the
+      previous year.
     </p>
 
     <footer>
