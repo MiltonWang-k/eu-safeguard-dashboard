@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>EU Steel Safeguard Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,8 +19,7 @@
   <main>
     <section class="notice">
       Use any filter independently. By default, the dashboard shows the
-      current quarter and the following quarter. Customs applicability and
-      clearance outcomes remain subject to EU rules and customs confirmation.
+      current quarter and the following quarter.
     </section>
 
     <section class="filters">
@@ -45,6 +44,24 @@
         </select>
       </label>
 
+      <label>
+        Sort results
+        <select id="sort">
+          <option value="quota_desc">
+            Quarterly quota: high to low
+          </option>
+          <option value="quota_asc">
+            Quarterly quota: low to high
+          </option>
+          <option value="yoy_desc">
+            YoY change: high to low
+          </option>
+          <option value="yoy_asc">
+            YoY change: low to high
+          </option>
+        </select>
+      </label>
+
       <button id="reset">Reset filters</button>
     </section>
 
@@ -65,7 +82,7 @@
       </div>
     </section>
 
-    <p id="status" aria-live="polite"></p>
+    <p id="status"></p>
 
     <div class="table-wrap">
       <table>
@@ -81,16 +98,14 @@
             <th>Out-of-quota duty</th>
           </tr>
         </thead>
+
         <tbody id="rows"></tbody>
       </table>
     </div>
 
     <p class="footnote">
-      “YoY change” compares the selected quarter with the same quarter one
-      year earlier for the same product category and country / quota pool.
-      “New / no comparable prior-year quota” means a matching prior-year
-      record was not available. Only independently trackable country-specific
-      quotas and quota pools are displayed.
+      YoY change compares the same product category, country/quota pool,
+      and quarter against the previous year.
     </p>
 
     <footer>
