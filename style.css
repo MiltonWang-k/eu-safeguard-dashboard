@@ -186,3 +186,19 @@ footer {
     font-size: 23px;
   }
 }
+
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+th.sortable:hover {
+  background: #0b3157;
+}
+
+th.sortable span {
+  display: inline-block;
+  min-width: 14px;
+  margin-left: 6px;
+  color: #a9d6f5;
+}
